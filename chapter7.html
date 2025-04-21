@@ -1,1 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이벤트 객체와 이벤트 전파</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        .container {
+            width: 85%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #eee;
+        }
+        h1 {
+            color: #333;
+            font-size: 22px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        h2 {
+            color: #444;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+        ul, ol {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin: 3px 0;
+            color: #555;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chapter 7: 이벤트 객체와 이벤트 전파</h1>
 
+        <h2>이벤트 객체 활용</h2>
+        <ul>
+            <li>이벤트 처리 함수에서 이벤트 객체를 사용하여 이벤트 정보를 얻습니다.
+                <ul>
+                    <li>이벤트 객체는 발생한 이벤트의 세부 정보(위치, 시간, 종류 등)를 담고 있습니다.</li>
+                    <li>예: 마우스 클릭 위치는 <code>event.clientX</code>, <code>event.clientY</code>로 확인 가능.</li>
+                </ul>
+            </li>
+            <li><code>preventDefault()</code> 메서드로 기본 동작 취소
+                <ul>
+                    <li>기본 이벤트 동작(예: 링크 이동, 폼 제출)을 막고 사용자 정의 동작을 실행합니다.</li>
+                    <li>예: <code>event.preventDefault()</code>로 앵커 태그의 기본 이동 동작을 막음.</li>
+                    <li>폼 제출 시 페이지 새로고침 방지: <code>form.addEventListener('submit', (e) => { e.preventDefault(); })</code></li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>키보드 이벤트 처리</h2>
+        <ul>
+            <li>키보드 이벤트 발생 시 눌린 키를 확인하는 방법
+                <ul>
+                    <li><code>event.code</code>와 <code>event.key</code> 속성을 사용.</li>
+                    <li><code>event.code</code>: 물리적 키 위치(예: <code>KeyA</code>).</li>
+                    <li><code>event.key</code>: 입력된 문자(예: <code>a</code> 또는 <code>A</code>).</li>
+                </ul>
+            </li>
+            <li>활용 사례
+                <ul>
+                    <li>게임 개발에서 키 입력 감지(예: 화살표 키로 캐릭터 이동).</li>
+                    <li>예: <code>document.addEventListener('keydown', (e) => { if (e.key === 'ArrowUp') { moveUp(); } });</code></li>
+                    <li>과거에는 <code>keyCode</code>를 사용했으나, 현재는 <code>event.key</code>가 표준.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>캐러셀 구현</h2>
+        <ul>
+            <li>캐러셀은 이미지나 콘텐츠를 슬라이드 쇼 형태로 보여주는 기능입니다.
+                <ul>
+                    <li>화살표 버튼 클릭으로 콘텐츠를 전환.</li>
+                    <li>배열을 사용하여 이미지 목록 관리: <code>let images = ['img1.jpg', 'img2.jpg', 'img3.jpg'];</code></li>
+                </ul>
+            </li>
+            <li>구현 방법
+                <ul>
+                    <li>현재 인덱스를 변수로 관리: <code>let currentIndex = 0;</code></li>
+                    <li>다음 버튼 클릭 시: <code>currentIndex = (currentIndex + 1) % images.length;</code></li>
+                    <li>이전 버튼 클릭 시: <code>currentIndex = (currentIndex - 1 + images.length) % images.length;</code></li>
+                    <li>이미지 업데이트: <code>imageElement.src = images[currentIndex];</code></li>
+                </ul>
+            </li>
+            <li>추가 기능
+                <ul>
+                    <li>자동 슬라이드: <code>setInterval(nextSlide, 3000);</code>로 3초마다 전환.</li>
+                    <li>부드러운 전환 효과: CSS <code>transition</code> 속성 사용.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>이벤트 전파 메커니즘</h2>
+        <ul>
+            <li>이벤트 전파는 이벤트가 발생했을 때 브라우저가 이를 처리하는 과정입니다.
+                <ul>
+                    <li>윈도우 → 브라우저 → 타겟 엘리먼트 → 다시 윈도우로 돌아감.</li>
+                </ul>
+            </li>
+            <li>이벤트 전파 단계
+                <ul>
+                    <li>캡처링 단계: 윈도우에서 타겟 엘리먼트로 내려감.</li>
+                    <li>타겟 단계: 이벤트가 실제 타겟에 도달.</li>
+                    <li>버블링 단계: 타겟에서 다시 윈도우로 올라감.</li>
+                </ul>
+            </li>
+            <li>이벤트 리스너 설정
+                <ul>
+                    <li>기본은 버블링 단계에서 처리.</li>
+                    <li>캡처링 단계에서 처리하려면 <code>addEventListener</code>의 세 번째 인자를 <code>true</code>로 설정.</li>
+                    <li>예: <code>element.addEventListener('click', handler, true);</code></li>
+                </ul>
+            </li>
+            <li>이벤트 타겟과 커런트 타겟
+                <ul>
+                    <li><code>event.target</code>: 이벤트가 발생한 실제 요소.</li>
+                    <li><code>event.currentTarget</code>: 현재 이벤트 핸들러가 실행 중인 요소.</li>
+                    <li>예: 부모 요소에 리스너가 있고 자식 요소를 클릭하면, <code>target</code>은 자식, <code>currentTarget</code>은 부모.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>행동 항목</h2>
+        <ul>
+            <li>이벤트 객체 활용
+                <ul>
+                    <li>이벤트 처리 함수에서 이벤트 객체를 활용해 이벤트 정보를 효과적으로 처리.</li>
+                    <li><code>preventDefault()</code>를 사용하여 기본 동작을 취소하고 사용자 정의 동작 구현.</li>
+                </ul>
+            </li>
+            <li>키보드 이벤트 처리
+                <ul>
+                    <li><code>event.code</code> 또는 <code>event.key</code>를 사용하여 키 입력 감지.</li>
+                </ul>
+            </li>
+            <li>캐러셀 구현
+                <ul>
+                    <li>배열로 이미지 관리, 인덱스 조정으로 순환 구현.</li>
+                </ul>
+            </li>
+            <li>이벤트 전파 이해
+                <ul>
+                    <li>캡처링 또는 버블링 단계를 선택하여 이벤트 핸들러 연결.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
