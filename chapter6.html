@@ -1,1 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바스크립트 이벤트와 이벤트 처리</title>
+</head>
+<body>
+    <h1>Chapter 6: 자바스크립트 이벤트와 이벤트 처리</h1>
 
+    <h2>자바스크립트 이벤트란?</h2>
+    <ul>
+        <li>이벤트는 사용자가 웹 브라우저에서 수행하는 동작을 의미합니다.
+            <ul>
+                <li>예: 버튼 클릭, 페이지 로드, 키보드 입력, 마우스 이동 등.</li>
+                <li>브라우저 내부에서 발생하는 이벤트는 자바스크립트로 처리 가능하며, 브라우저 외부 이벤트(예: 운영체제 이벤트)는 윈도우에서 처리됩니다.</li>
+            </ul>
+        </li>
+        <li>이벤트는 웹 페이지의 상호작용을 가능하게 하는 핵심 요소입니다.
+            <ul>
+                <li>사용자의 동작에 즉각 반응하여 동적인 웹 경험을 제공합니다.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>자바스크립트 이벤트의 종류</h2>
+    <ul>
+        <li>문서 로딩 관련 이벤트
+            <ul>
+                <li>abort: 리소스 로딩이 중단될 때 발생.</li>
+                <li>error: 리소스 로딩 실패 시 발생.</li>
+                <li>load: 페이지 또는 리소스가 완전히 로드되었을 때 발생.</li>
+                <li>unload: 페이지가 닫히거나 새로고침될 때 발생.</li>
+            </ul>
+        </li>
+        <li>마우스 관련 이벤트
+            <ul>
+                <li>click: 요소를 클릭했을 때 발생.</li>
+                <li>dblclick: 요소를 더블 클릭했을 때 발생.</li>
+                <li>mousedown: 마우스 버튼을 누를 때 발생.</li>
+                <li>mousemove: 마우스를 움직일 때 발생.</li>
+                <li>mouseover: 마우스가 요소 위로 올라갈 때 발생.</li>
+                <li>mouseout: 마우스가 요소를 벗어날 때 발생.</li>
+                <li>mouseup: 마우스 버튼을 뗄 때 발생.</li>
+            </ul>
+        </li>
+        <li>키보드 관련 이벤트
+            <ul>
+                <li>keydown: 키를 누를 때 발생.</li>
+                <li>keypress: 키를 누르고 있을 때 발생(문자 입력 시 유용).</li>
+                <li>keyup: 키를 뗄 때 발생.</li>
+            </ul>
+        </li>
+        <li>폼 관련 이벤트
+            <ul>
+                <li>blur: 요소가 포커스를 잃을 때 발생.</li>
+                <li>change: 입력값이 변경되고 포커스가 벗어날 때 발생.</li>
+                <li>reset: 폼이 리셋될 때 발생.</li>
+                <li>submit: 폼이 제출될 때 발생.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>이벤트 처리 방법</h2>
+    <ul>
+        <li>이벤트와 함수를 연결하여 이벤트를 처리합니다.
+            <ul>
+                <li>이 함수를 이벤트 처리기(Event Handler) 또는 이벤트 리스너(Event Listener)라고 부릅니다.</li>
+            </ul>
+        </li>
+        <li>전통적인 방식: 'on' 속성 사용
+            <ul>
+                <li>HTML 요소에 직접 이벤트 속성을 지정합니다.</li>
+                <li>예: <button onclick="myFunction()">클릭</button></li>
+                <li>직접 함수 내용을 작성하거나 미리 정의된 함수를 호출 가능.</li>
+                <li>예: <button onclick="alert('안녕!')">클릭</button></li>
+            </ul>
+        </li>
+        <li>표준 방식: addEventListener 메서드
+            <ul>
+                <li>더 유연하고 현대적인 방법으로, 이벤트 이름과 실행할 함수를 연결합니다.</li>
+                <li>예: element.addEventListener('click', function() { alert('클릭!'); });</li>
+                <li>하나의 이벤트에 여러 함수를 연결 가능.</li>
+                <li>세 번째 인자로 캡처 여부를 지정할 수 있지만, 일반적으로 두 개의 인자만 사용.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>예제: 텍스트 필드 글자수 체크</h2>
+    <ul>
+        <li>텍스트 필드에서 입력된 글자수를 실시간으로 확인하는 기능.
+            <ul>
+                <li>keydown 또는 keypress 이벤트를 사용하여 입력값을 감지.</li>
+                <li>텍스트 필드의 값을 가져와 length 속성으로 글자수 계산.</li>
+                <li>예: let text = inputElement.value; let length = text.length;</li>
+                <li>계산된 글자수를 화면에 표시.</li>
+            </ul>
+        </li>
+        <li>실시간 업데이트를 위해 이벤트 리스너를 활용.
+            <ul>
+                <li>예: input.addEventListener('keyup', updateCharCount);</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>예제: 모달 박스 구현</h2>
+    <ul>
+        <li>모달 박스는 화면에 팝업되어 기존 콘텐츠를 가리고 특정 내용에 집중하도록 하는 창입니다.
+            <ul>
+                <li>사용자가 버튼을 클릭하면 모달이 나타나고, 닫기 버튼으로 숨길 수 있습니다.</li>
+            </ul>
+        </li>
+        <li>CSS를 활용한 스타일링
+            <ul>
+                <li>모달 박스의 위치를 화면 중앙에 설정하고, 배경을 반투명하게 처리.</li>
+                <li>예: .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.5); }</li>
+                <li>기본적으로 숨김 상태: .modal { display: none; }</li>
+            </ul>
+        </li>
+        <li>자바스크립트를 통한 동적 제어
+            <ul>
+                <li>active 클래스를 추가/제거하여 모달의 표시 여부를 제어.</li>
+                <li>예: modal.classList.add('active');로 표시, modal.classList.remove('active');로 숨김.</li>
+                <li>버튼 클릭 이벤트에 연결하여 동작: button.addEventListener('click', showModal);</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>행동 항목</h2>
+    <ul>
+        <li>텍스트 필드 글자수 체크 기능 구현
+            <ul>
+                <li>keydown 또는 keypress 이벤트를 활용하여 실시간으로 글자수를 업데이트.</li>
+                <li>텍스트 필드 값을 읽어와 length 속성으로 글자수 계산 후 표시.</li>
+            </ul>
+        </li>
+        <li>모달 박스 구현
+            <ul>
+                <li>CSS를 통해 모달 박스의 배경을 반투명하게 설정하여 기존 콘텐츠와 시각적으로 분리.</li>
+                <li>자바스크립트로 active 클래스를 추가/제거하여 모달의 표시 여부를 제어.</li>
+            </ul>
+        </li>
+    </ul>
+</body>
+</html>
