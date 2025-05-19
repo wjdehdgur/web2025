@@ -1,103 +1,58 @@
-from pathlib import Path
-
-# HTML 문서 내용
-html_content = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>디지털 시계 만들기 요약</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>디지털 시계</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; line-height: 1.6; }
-        h1, h2 { color: #333; }
-        pre { background: #f0f0f0; padding: 10px; overflow-x: auto; }
-        code { background: #eee; padding: 2px 4px; }
-        section { margin-bottom: 30px; }
-        hr { margin: 30px 0; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        #clock {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
-    <h1>디지털 시계 만들기 요약 정리</h1>
+    <div id="clock"></div>
 
-    <section>
-        <h2>✅ 핵심 코드 설명</h2>
-        <pre><code>const displayTime = document.querySelector("#clock");
+    <script>
+        const displayTime = document.querySelector("#clock");
 
-let clock = () => {
-    let current = new Date();
-    let hrs = current.getHours();
-    let mins = current.getMinutes();
-    let secs = current.getSeconds();
-    let period = "AM";
+        let clock = () => {
+            let current = new Date();
+            let hrs = current.getHours();
+            let mins = current.getMinutes();
+            let secs = current.getSeconds();
+            let period = "AM";
 
-    if (hrs === 0) {
-        hrs = 12;
-    } else if (hrs > 12) {
-        hrs = hrs - 12;
-        period = "PM";
-    }
+            if (hrs === 0) {
+                hrs = 12;
+            } else if (hrs > 12) {
+                hrs = hrs - 12;
+                period = "PM";
+            }
 
-    hrs = (hrs < 10) ? "0" + hrs : hrs;
-    mins = (mins < 10) ? "0" + mins : mins;
-    secs = (secs < 10) ? "0" + secs : secs;
+            hrs = (hrs < 10) ? "0" + hrs : hrs;
+            mins = (mins < 10) ? "0" + mins : mins;
+            secs = (secs < 10) ? "0" + secs : secs;
 
-    displayTime.innerText = `${period}  ${hrs} : ${mins} : ${secs}`;
-};
+            displayTime.innerText = `${period} ${hrs}:${mins}:${secs}`;
+        };
 
-setInterval(clock, 1000);</code></pre>
-        <ul>
-            <li><code>new Date()</code>로 현재 시간 객체 생성</li>
-            <li><code>getHours()</code>, <code>getMinutes()</code>, <code>getSeconds()</code>로 시, 분, 초 추출</li>
-            <li>12시간제 AM/PM 변환 처리</li>
-            <li>한 자리 수 앞에 0 추가</li>
-            <li><code>setInterval</code>로 1초마다 업데이트</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>✅ Date 객체</h2>
-        <ul>
-            <li>날짜와 시간 정보를 다루는 내장 객체</li>
-            <li>현재 시간 출력, 남은 시간 계산 등 다양하게 활용 가능</li>
-            <li><code>new Date()</code>로 생성</li>
-            <li>주요 메서드: <code>getHours()</code>, <code>getMinutes()</code>, <code>getSeconds()</code></li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>✅ window 객체</h2>
-        <ul>
-            <li>브라우저의 최상위 객체</li>
-            <li>모든 내장 객체는 window에 포함됨</li>
-            <li>주요 속성: <code>document</code>, <code>scrollX</code>, <code>localStorage</code> 등</li>
-            <li><code>window.document</code>는 생략 가능</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>✅ 내장 객체란?</h2>
-        <ul>
-            <li>브라우저가 미리 제공하는 객체</li>
-            <li>예: <code>window</code>, <code>document</code>, <code>Date</code>, <code>Math</code>, <code>Array</code></li>
-            <li>window는 이 객체들의 부모</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>✅ 정리 요약</h2>
-        <ul>
-            <li>디지털 시계 구현에 <code>Date</code>와 <code>window</code> 객체가 핵심</li>
-            <li><code>setInterval</code>로 시간 정보를 실시간 갱신</li>
-            <li><code>document</code>를 통해 HTML에 접근</li>
-        </ul>
-        <p><strong>이 정리는 GitHub README 또는 수업 노트로 활용 가능</strong></p>
-    </section>
+        setInterval(clock, 1000);
+    </script>
 </body>
 </html>
-"""
-
-# 저장 경로
-html_path = Path("/mnt/data/digital_clock_summary.html")
-html_path.write_text(html_content, encoding="utf-8")
-
-html_path
-
