@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML5 및 Canvas API 노트 정리</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        .container {
+            width: 85%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #eee;
+        }
+        h1 {
+            color: #333;
+            font-size: 22px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        h2 {
+            color: #444;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+        ul, ol {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin: 3px 0;
+            color: #555;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chapter 12: HTML5 및 Canvas API</h1>
+
+        <h2>HTML5와 PC와 모바일</h2>
+        <ul>
+            <li>2012년 국내 최초로 HTML5 게임 개발을 시작하여 웹과 웹, PC와 모바일 어느 환경에서도 구동 가능.</li>
+            <li>삼성전자, 페이스북 같은 글로벌 파트너와 함께 진행.</li>
+            <li>게임은 모든 구성을 기반으로 게임을 만들며 환경에 맞춰 조정.</li>
+        </ul>
+
+        <h2>캔버스 사용</h2>
+        <ul>
+            <li>HTML에 포함된 Canvas API를 사용하면 웹 문서 상에 직접 그려볼 수 있다.
+                <ul>
+                    <li>예: <code>&lt;canvas&gt;</code> 태그를 사용하여 2D 그래픽을 그린다.</li>
+                </ul>
+            </li>
+            <li>Canvas API에는 도형을 그리거나 색칠하는 함수를 비롯해 선의 굵기나 색상 속성처럼 필요한 기능을 제공.</li>
+            <li>UI나 차트 같은 그래픽 인터페이스를 그려낼 수 있다.</li>
+        </ul>
+
+        <h2>캔버스 색상과 선 설정</h2>
+        <ul>
+            <li>색상 설정
+                <ul>
+                    <li><code>fillStyle = "색상"</code>: 내부를 채우는 색상 설정.</li>
+                    <li><code>strokeStyle = "색상"</code>: 선의 색상 설정.</li>
+                </ul>
+            </li>
+            <li>예시
+                <ul>
+                    <li><code>ctx.fillStyle = "yellow";</code> 내부를 노란색으로 채움.</li>
+                    <li><code>ctx.strokeStyle = "red";</code> 선을 빨간색으로 설정.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>도형 그리기</h2>
+        <ul>
+            <li>기본 도형 그리기
+                <ul>
+                    <li><code>beginPath()</code>: 새로운 경로 시작.</li>
+                    <li><code>closePath()</code>: 현재 경로를 닫음.</li>
+                    <li><code>moveTo(x, y)</code>: 펜을 (x, y) 위치로 이동.</li>
+                    <li><code>lineTo(x, y)</code>: (x, y) 위치로 선을 그림.</li>
+                    <li><code>arc(x, y, radius, startAngle, endAngle, counterclockwise)</code>: 원 또는 원호를 그림.</li>
+                    <li><code>fill()</code>: 내부를 채움.</li>
+                    <li><code>stroke()</code>: 선을 그림.</li>
+                </ul>
+            </li>
+            <li>예시
+                <ul>
+                    <li><code>ctx.arc(200, 150, 100, 0, Math.PI * 2, true);</code> 원을 그리며 내부를 노란색으로 채움.</li>
+                    <li><code>ctx.arc(200, 200, 50, 0, Math.PI / 180 * 60, false);</code> 원호를 그리며 선을 빨간색으로 설정.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>캔버스 초기화 및 그리기</h2>
+        <ul>
+            <li>초기화
+                <ul>
+                    <li><code>clearRect(x, y, width, height)</code>: 지정된 사각형 영역을 지움.</li>
+                </ul>
+            </li>
+            <li>그리기 예시
+                <ul>
+                    <li><code>ctx.beginPath(); ctx.moveTo(120, 200); ctx.arc(120, 200, 50, Math.PI / 180 * 90, (Math.PI / 180) * 270, false); ctx.stroke();</code> 파란색 원호 그림.</li>
+                    <li><code>ctx.beginPath(); ctx.arc(200, 200, 50, 0, Math.PI / 180 * 60, false); ctx.stroke();</code> 빨간색 원호 그림.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
