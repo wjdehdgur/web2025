@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>readyState와 XMLHttpRequest 노트 정리</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        .container {
+            width: 85%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #eee;
+        }
+        h1 {
+            color: #333;
+            font-size: 22px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        h2 {
+            color: #444;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+        ul, ol {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin: 3px 0;
+            color: #555;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>readyState와 XMLHttpRequest 노트 정리</h1>
+
+        <h2>readyState와 이벤트에 쏘기</h2>
+        <ul>
+            <li>readyState 값이 바뀔 때마다 <code>readystatechange</code> 이벤트가 발생한다.
+                <ul>
+                    <li>모종이 성공적으로 끝났을 때(<code>readyState</code> 값이 4일 때) 실행할 명령을 설정한다.</li>
+                </ul>
+            </li>
+            <li>예시
+                <ul>
+                    <li><code>xhr.onreadystatechange = function() { if (xhr.readyState === 4) { ... } }</code></li>
+                </ul>
+            </li>
+            <li>작업 완료 후
+                <ul>
+                    <li>readyState 이벤트가 발생했을 때 실행할 함수를 연결한다.</li>
+                    <li>작업 완료 후 데이터에서 readyState 값이 4인 경우에 명령을 처리한다.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>readyState 프로퍼티</h2>
+        <ul>
+            <li>readyState 프로퍼티는 XMLHttpRequest 객체의 현재 상태를 나타낸다.
+                <ul>
+                    <li>객체에서 서버로 자료를 요청했는지, 자료가 도착했는지, 사용함 준비가 되었는지 등을 알 수 있다.</li>
+                </ul>
+            </li>
+            <li>상태와 기능
+                <ul>
+                    <li>0: 아직 아무 요청 하지 않은 상태이다.</li>
+                    <li>1: 서버로 자료를 요청하고 성공한 상태이다.</li>
+                    <li>2: 서버 요청에 대한 응답으로 헤더가 도착한 상태이다.</li>
+                    <li>3: 서버에서 자료가 로딩 중인 상태이다.</li>
+                    <li>4: 자료 처리가 끝나서 프로그램에서 사용할 수 있는 상태이다.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>XMLHttpRequest 객체</h2>
+        <ul>
+            <li>웹 브라우저에서 서버로 데이터를 요청하고 서버에서 자료를 받아올 때는 HTTP 통신이 가능한 XMLHttpRequest 객체를 사용한다.
+                <ul>
+                    <li>XMLHttpRequest 객체의 프로퍼티와 메서드를 사용해서 자료를 주고받거나 상태를 체크한다.</li>
+                    <li>웹 페이지 전체가 아니라 필요한 부분만 자료만 가져올 수 있다.</li>
+                </ul>
+            </li>
+            <li>XMLHttpRequest는 자원을 HTTP 프로토콜을 사용하여 ‘Request(요청)’한다.</li>
+        </ul>
+
+        <h2>일반적인 서버와 클라이언트의 통신</h2>
+        <ul>
+            <li>웹 브라우저 화면에 ‘www.daum.net’을 입력하고 [Enter]를 누르면 인터넷 화선을 통해 서버 컴퓨터로 접속한다.
+                <ul>
+                    <li>서버 컴퓨터에서 해당 페이지를 찾아낸 후 내용을 다운로드해서 웹 브라우저 화면에 보여준다.</li>
+                    <li>매뉴 중에서 ‘게임’을 클릭하면 현재 화면이 완전히 사라지고 게임과 관련된 페이지로 이동한다.</li>
+                </ul>
+            </li>
+            <li>매뉴 나 크롬을 클릭하면 현재 페이지로 완전히 사라지고 새로운 화면이 가져와 보여주는 방식.</li>
+        </ul>
+
+        <h2>비동기적으로 통신하면</h2>
+        <ul>
+            <li>페이지북이나 트위터 같은 SNS 사이트를 사용할 때에도 화면을 스크롤하면 데이터 전처가 새로 로딩되기 전에 기존 내용만 그대로 나옴.
+                <ul>
+                    <li>로딩되는 것이 아니라 기존 내용 내영은 그대로 둔 상태에서 다음 내용만 가져와서 보여준다.</li>
+                </ul>
+            </li>
+            <li>이렇게 웹 문서 전체를 다시 불러오지 않고 일부만 가져와 실행할 수 있는 것은 AJAX(Asynchronous Javascript And XML) 기능 때문이다.</li>
+        </ul>
+    </div>
+</body>
+</html>
