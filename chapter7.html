@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이벤트 객체와 이벤트 전파</title>
+    <title>생성자 함수와 객체 노트 정리</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,120 +49,94 @@
 </head>
 <body>
     <div class="container">
-        <h1>Chapter 7: 이벤트 객체와 이벤트 전파</h1>
+        <h1>생성자 함수와 객체 노트 정리</h1>
 
-        <h2>이벤트 객체 활용</h2>
+        <h2>생성자 함수를 사용해 객체 정의하기</h2>
         <ul>
-            <li>이벤트 처리 함수에서 이벤트 객체를 사용하여 이벤트 정보를 얻습니다.
+            <li>생성자 함수는 일반적인 함수와 같은 형식.
                 <ul>
-                    <li>이벤트 객체는 발생한 이벤트의 세부 정보(위치, 시간, 종류 등)를 담고 있습니다.</li>
-                    <li>예: 마우스 클릭 위치는 <code>event.clientX</code>, <code>event.clientY</code>로 확인 가능.</li>
+                    <li>함수 이름의 첫 글자는 대문자로 사용한다.</li>
+                    <li>함수 내부에서 <code>this</code>를 사용한다.</li>
                 </ul>
             </li>
-            <li><code>preventDefault()</code> 메서드로 기본 동작 취소
+            <li>형식 예시
                 <ul>
-                    <li>기본 이벤트 동작(예: 링크 이동, 폼 제출)을 막고 사용자 정의 동작을 실행합니다.</li>
-                    <li>예: <code>event.preventDefault()</code>로 앵커 태그의 기본 이동 동작을 막음.</li>
-                    <li>폼 제출 시 페이지 새로고침 방지: <code>form.addEventListener('submit', (e) => { e.preventDefault(); })</code></li>
+                    <li><code>function 함수명(매개변수) { this.키1 = 값1; this.키2 = 값2; this.메서드1 = function() { ... }; this.메서드2 = function() { ... }; }</code></li>
                 </ul>
             </li>
         </ul>
 
-        <h2>키보드 이벤트 처리</h2>
+        <h2>생성자 함수를 사용해 객체 만들기</h2>
         <ul>
-            <li>키보드 이벤트 발생 시 눌린 키를 확인하는 방법
+            <li>객체마다 반복되는 프로퍼티와 메서드가 있다면 객체 특성을 미리 정의해 놓고 필요한 만큼 생성.
                 <ul>
-                    <li><code>event.code</code>와 <code>event.key</code> 속성을 사용.</li>
-                    <li><code>event.code</code>: 물리적 키 위치(예: <code>KeyA</code>).</li>
-                    <li><code>event.key</code>: 입력된 문자(예: <code>a</code> 또는 <code>A</code>).</li>
+                    <li>특성을 사용해서 객체를 만들 수 있다.</li>
                 </ul>
             </li>
-            <li>활용 사례
+            <li>특정 객체를 만들 때 사용하는 함수를 생성자 함수라고 한다.</li>
+            <li>생성자 함수를 사용해서 정의된 객체를 ‘인스턴스’ 또는 ‘인스턴스 객체’라고 부른다.</li>
+            <li>예시
                 <ul>
-                    <li>게임 개발에서 키 입력 감지(예: 화살표 키로 캐릭터 이동).</li>
-                    <li>예: <code>document.addEventListener('keydown', (e) => { if (e.key === 'ArrowUp') { moveUp(); } });</code></li>
-                    <li>과거에는 <code>keyCode</code>를 사용했으나, 현재는 <code>event.key</code>가 표준.</li>
+                    <li><code>const 함수명(매개변수) = function () { ... }</code></li>
                 </ul>
             </li>
         </ul>
 
-        <h2>캐러셀 구현</h2>
+        <h2>객체 복사하기</h2>
         <ul>
-            <li>캐러셀은 이미지나 콘텐츠를 슬라이드 쇼 형태로 보여주는 기능입니다.
+            <li>원시 유형 자료 복사
                 <ul>
-                    <li>화살표 버튼 클릭으로 콘텐츠를 전환.</li>
-                    <li>배열을 사용하여 이미지 목록 관리: <code>let images = ['img1.jpg', 'img2.jpg', 'img3.jpg'];</code></li>
+                    <li>값 복사: 값을 복사한다.</li>
+                    <li>복사한 자료의 값 변경 → 원래 자료의 값은 그대로.</li>
+                    <li>예시: <code>let number1 = 100; let number2 = number1; number2 = 200;</code> → number1은 100, number2는 200.</li>
                 </ul>
             </li>
-            <li>구현 방법
+            <li>객체 복사
                 <ul>
-                    <li>현재 인덱스를 변수로 관리: <code>let currentIndex = 0;</code></li>
-                    <li>다음 버튼 클릭 시: <code>currentIndex = (currentIndex + 1) % images.length;</code></li>
-                    <li>이전 버튼 클릭 시: <code>currentIndex = (currentIndex - 1 + images.length) % images.length;</code></li>
-                    <li>이미지 업데이트: <code>imageElement.src = images[currentIndex];</code></li>
-                </ul>
-            </li>
-            <li>추가 기능
-                <ul>
-                    <li>자동 슬라이드: <code>setInterval(nextSlide, 3000);</code>로 3초마다 전환.</li>
-                    <li>부드러운 전환 효과: CSS <code>transition</code> 속성 사용.</li>
+                    <li>주소 복사: 주소를 복사한다.</li>
+                    <li>복사한 자료의 값 변경 → 원래 자료의 값도 바뀐다.</li>
+                    <li>예시: <code>let bag1 = { color: "blue" }; let bag2 = bag1; bag2.color = "red";</code> → bag1.color도 "red"로 변경.</li>
                 </ul>
             </li>
         </ul>
 
-        <h2>이벤트 전파 메커니즘</h2>
+        <h2>메서드와 this</h2>
         <ul>
-            <li>이벤트 전파는 이벤트가 발생했을 때 브라우저가 이를 처리하는 과정입니다.
+            <li><code>this</code>: 메서드에서 객체 안에 있는 프로퍼티값을 사용할 때, 현재 객체를 가리키는 예약어.
                 <ul>
-                    <li>윈도우 → 브라우저 → 타겟 엘리먼트 → 다시 윈도우로 돌아감.</li>
-                </ul>
-            </li>
-            <li>이벤트 전파 단계
-                <ul>
-                    <li>캡처링 단계: 윈도우에서 타겟 엘리먼트로 내려감.</li>
-                    <li>타겟 단계: 이벤트가 실제 타겟에 도달.</li>
-                    <li>버블링 단계: 타겟에서 다시 윈도우로 올라감.</li>
-                </ul>
-            </li>
-            <li>이벤트 리스너 설정
-                <ul>
-                    <li>기본은 버블링 단계에서 처리.</li>
-                    <li>캡처링 단계에서 처리하려면 <code>addEventListener</code>의 세 번째 인자를 <code>true</code>로 설정.</li>
-                    <li>예: <code>element.addEventListener('click', handler, true);</code></li>
-                </ul>
-            </li>
-            <li>이벤트 타겟과 커런트 타겟
-                <ul>
-                    <li><code>event.target</code>: 이벤트가 발생한 실제 요소.</li>
-                    <li><code>event.currentTarget</code>: 현재 이벤트 핸들러가 실행 중인 요소.</li>
-                    <li>예: 부모 요소에 리스너가 있고 자식 요소를 클릭하면, <code>target</code>은 자식, <code>currentTarget</code>은 부모.</li>
+                    <li>예시: <code>let book4 = { title: "Javascript", pages: 500, author: "고정희", done: false, finish: function() { this.done === false ? console.log("읽는 중") : console.log("완독"); } }; book4.finish();</code> → "읽는 중"</li>
                 </ul>
             </li>
         </ul>
 
-        <h2>행동 항목</h2>
+        <h2>객체 참조하기</h2>
         <ul>
-            <li>이벤트 객체 활용
+            <li>객체 안에 또다른 객체를 넣을 수 있다.
                 <ul>
-                    <li>이벤트 처리 함수에서 이벤트 객체를 활용해 이벤트 정보를 효과적으로 처리.</li>
-                    <li><code>preventDefault()</code>를 사용하여 기본 동작을 취소하고 사용자 정의 동작 구현.</li>
+                    <li>예시: <code>let student = { name: "DoReMi", score: { history: 85, science: 94, average: function() { return (this.history + this.science) / 2; } } }; student.score.history;</code> → 85, <code>student.score.average();</code> → 89.5</li>
                 </ul>
             </li>
-            <li>키보드 이벤트 처리
+        </ul>
+
+        <h2>사용자 정의 객체 만들기</h2>
+        <ul>
+            <li>객체는 여러 개의 프로퍼티로 구성되어 있는데, 프로퍼티는 키: 값 형태를 가지고 있다.</li>
+            <li>객체를 만들 때는 객체 이름 다음에 중괄호()를 사용하고, 중괄호 사이에 키: 값 형태로 필요한 프로퍼티를 나열한다.</li>
+            <li>각 키는 문자열이거나 숫자, 심벌만 사용할 수 있고, 각 프로퍼티는 쉼표()로 구분한다.</li>
+            <li>형식 예시
                 <ul>
-                    <li><code>event.code</code> 또는 <code>event.key</code>를 사용하여 키 입력 감지.</li>
+                    <li><code>객체 명 { 키1: 값1, 키2: 값2, ... }</code></li>
                 </ul>
             </li>
-            <li>캐러셀 구현
-                <ul>
-                    <li>배열로 이미지 관리, 인덱스 조정으로 순환 구현.</li>
-                </ul>
-            </li>
-            <li>이벤트 전파 이해
-                <ul>
-                    <li>캡처링 또는 버블링 단계를 선택하여 이벤트 핸들러 연결.</li>
-                </ul>
-            </li>
+        </ul>
+
+        <h2>객체 관리</h2>
+        <ul>
+            <li>프로그램에서 객체 데이터를 저장하고 처리하는 기본 단위.</li>
+            <li>자바스크립트에서 객체는 관련된 정보와 동작을 함께 모아 놓은 것.</li>
+            <li>문서 객체 모델(DOM): 웹 문서 자체도 객체이고 웹 문서에 포함된 이미지와 링크, 텍스트 필드 등은 모두 두 이미지 객체, 링크 객체, 폼 객체처럼 각기 별도의 객체.</li>
+            <li>브라우저 객체 모델: 웹 브라우저에서 사용할 정보 객체로 지정되어 있다.</li>
+            <li>사용자 정의 객체: 필요한 때마다 사용자가 만들어 사용하는 객체.</li>
         </ul>
     </div>
 </body>
