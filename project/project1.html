@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>기초 쇼핑몰 관리자</title>
+  <title>쇼핑몰 관리자</title>
   <style>
     body {
       font-family: sans-serif;
@@ -21,14 +20,36 @@
       color: white;
       border: none;
       margin-top: 10px;
+      cursor: pointer;
     }
     ul {
       margin-top: 20px;
-      padding-left: 20px;
+      padding-left: 0;
+    }
+    li {
+      list-style: none;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .actions button {
+      margin-left: 5px;
+      padding: 4px 8px;
+      font-size: 12px;
+      background-color: gray;
+    }
+    .actions button.delete {
+      background-color: crimson;
+    }
+    .actions button.edit {
+      background-color: goldenrod;
     }
   </style>
 </head>
 <body>
+
   <h1>상품 등록</h1>
 
   <label>상품명:</label>
@@ -43,22 +64,73 @@
   <ul id="productList"></ul>
 
   <script>
-    function addProduct() {
-      const name = document.getElementById('nameInput').value;
-      const price = document.getElementById('priceInput').value;
+    let products = [];
 
-      if (!name || !price) {
-        alert('상품명과 가격을 입력해주세요.');
+    function addProduct() {
+      const name = document.getElementById('nameInput').value.trim();
+      const price = Number(document.getElementById('priceInput').value);
+
+      if (!name || isNaN(price) || price <= 0) {
+        alert('상품명과 올바른 가격을 입력해주세요.');
         return;
       }
 
-      const li = document.createElement('li');
-      li.textContent = `${name} - ${price}원`;
-
-      document.getElementById('productList').appendChild(li);
+      products.push({ name, price });
+      renderProducts();
 
       document.getElementById('nameInput').value = '';
       document.getElementById('priceInput').value = '';
+    }
+
+    function renderProducts() {
+      const list = document.getElementById('productList');
+      list.innerHTML = '';
+
+      products.forEach((product, index) => {
+        const li = document.createElement('li');
+        const text = document.createElement('span');
+        text.textContent = `${product.name} - ${product.price}원`;
+
+        const actions = document.createElement('span');
+        actions.className = 'actions';
+
+        const editBtn = document.createElement('button');
+        editBtn.className = 'edit';
+        editBtn.textContent = '수정';
+        editBtn.onclick = () => editProduct(index);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete';
+        deleteBtn.textContent = '삭제';
+        deleteBtn.onclick = () => deleteProduct(index);
+
+        actions.appendChild(editBtn);
+        actions.appendChild(deleteBtn);
+
+        li.appendChild(text);
+        li.appendChild(actions);
+        list.appendChild(li);
+      });
+    }
+
+    function deleteProduct(index) {
+      if (confirm('정말 삭제하시겠습니까?')) {
+        products.splice(index, 1);
+        renderProducts();
+      }
+    }
+
+    function editProduct(index) {
+      const newName = prompt('새 상품명을 입력하세요:', products[index].name);
+      const newPrice = prompt('새 가격을 입력하세요:', products[index].price);
+
+      if (newName && !isNaN(newPrice) && Number(newPrice) > 0) {
+        products[index].name = newName.trim();
+        products[index].price = Number(newPrice);
+        renderProducts();
+      } else {
+        alert('입력이 올바르지 않습니다.');
+      }
     }
   </script>
 </body>
