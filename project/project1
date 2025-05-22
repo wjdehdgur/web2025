@@ -1,1 +1,65 @@
 
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>기초 쇼핑몰 관리자</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+    }
+    input {
+      padding: 5px;
+      margin: 5px 0;
+      width: 100%;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: teal;
+      color: white;
+      border: none;
+      margin-top: 10px;
+    }
+    ul {
+      margin-top: 20px;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>상품 등록</h1>
+
+  <label>상품명:</label>
+  <input type="text" id="nameInput" placeholder="상품명을 입력하세요" />
+
+  <label>가격:</label>
+  <input type="number" id="priceInput" placeholder="가격을 입력하세요" />
+
+  <button onclick="addProduct()">추가</button>
+
+  <h2>상품 목록</h2>
+  <ul id="productList"></ul>
+
+  <script>
+    function addProduct() {
+      const name = document.getElementById('nameInput').value;
+      const price = document.getElementById('priceInput').value;
+
+      if (!name || !price) {
+        alert('상품명과 가격을 입력해주세요.');
+        return;
+      }
+
+      const li = document.createElement('li');
+      li.textContent = `${name} - ${price}원`;
+
+      document.getElementById('productList').appendChild(li);
+
+      document.getElementById('nameInput').value = '';
+      document.getElementById('priceInput').value = '';
+    }
+  </script>
+</body>
+</html>
