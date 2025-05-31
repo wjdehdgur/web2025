@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>확장형 쇼핑몰 관리자</title>
+  <title>쇼핑몰 관리자</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -17,7 +17,7 @@
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       width: 100%;
-      max-width: 500px;
+      max-width: 600px;
     }
     h1 {
       text-align: center;
@@ -29,7 +29,7 @@
       display: block;
       margin: 15px 0 5px;
     }
-    input {
+    input, select {
       width: 100%;
       padding: 10px;
       font-size: 15px;
@@ -37,7 +37,7 @@
       border-radius: 6px;
     }
     button {
-      margin-top: 20px;
+      margin-top: 10px;
       width: 100%;
       padding: 10px;
       background-color: #3498db;
@@ -49,6 +49,11 @@
     }
     button:hover {
       background-color: #2980b9;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
     }
     ul {
       list-style: none;
@@ -62,6 +67,7 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;
+      align-items: center;
     }
     .actions button {
       margin-left: 6px;
@@ -71,14 +77,9 @@
       border: none;
       cursor: pointer;
     }
-    .edit {
-      background-color: #f39c12;
-      color: white;
-    }
-    .delete {
-      background-color: #e74c3c;
-      color: white;
-    }
+    .edit { background-color: #f39c12; color: white; }
+    .delete { background-color: #e74c3c; color: white; }
+    img.preview { max-height: 40px; margin-right: 10px; }
   </style>
 </head>
 <body>
@@ -90,13 +91,26 @@
     <label for="price">가격</label>
     <input type="number" id="price" placeholder="가격을 입력하세요">
 
+    <label for="stock">재고</label>
+    <input type="number" id="stock" placeholder="재고 수량 입력">
+
+    <label for="image">상품 이미지</label>
+    <input type="file" id="image">
+
     <button onclick="addProduct()">상품 추가</button>
+
+    <div class="controls">
+      <button onclick="clearAll()">전체 삭제</button>
+      <button onclick="sortBy('name')">이름순 정렬</button>
+      <button onclick="sortBy('price')">가격순 정렬</button>
+    </div>
 
     <ul id="productList"></ul>
   </div>
 
   <script>
     let products = JSON.parse(localStorage.getItem("products") || "[]");
+    let sortDirection = { name: 1, price: 1 };
 
     function saveToStorage() {
       localStorage.setItem("products", JSON.stringify(products));
@@ -108,7 +122,7 @@
       products.forEach((p, i) => {
         const li = document.createElement("li");
         li.innerHTML = `
-          <span>${p.name} - ${Number(p.price).toLocaleString()}원</span>
+          <span><img src="${p.image}" class="preview">${p.name} - ${Number(p.price).toLocaleString()}원 - 재고: ${p.stock}</span>
           <span class="actions">
             <button class="edit" onclick="editProduct(${i})">수정</button>
             <button class="delete" onclick="deleteProduct(${i})">삭제</button>
@@ -120,18 +134,25 @@
     function addProduct() {
       const name = document.getElementById("name").value.trim();
       const price = document.getElementById("price").value.trim();
+      const stock = document.getElementById("stock").value.trim();
+      const imageInput = document.getElementById("image");
 
-      if (!name || !price || isNaN(price) || Number(price) <= 0) {
-        alert("올바른 상품명과 가격을 입력해주세요.");
+      if (!name || !price || !stock || isNaN(price) || Number(price) <= 0 || isNaN(stock) || Number(stock) < 0) {
+        alert("모든 항목을 정확히 입력하세요.");
         return;
       }
 
-      products.push({ name, price });
-      saveToStorage();
-      render();
-
-      document.getElementById("name").value = "";
-      document.getElementById("price").value = "";
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        products.push({ name, price: Number(price), stock: Number(stock), image: e.target.result });
+        saveToStorage();
+        render();
+        document.getElementById("name").value = "";
+        document.getElementById("price").value = "";
+        document.getElementById("stock").value = "";
+        imageInput.value = "";
+      };
+      if (imageInput.files[0]) reader.readAsDataURL(imageInput.files[0]);
     }
 
     function deleteProduct(index) {
@@ -143,15 +164,35 @@
     }
 
     function editProduct(index) {
-      const newName = prompt("새 상품명:", products[index].name);
-      const newPrice = prompt("새 가격:", products[index].price);
-      if (newName && !isNaN(newPrice) && Number(newPrice) > 0) {
-        products[index].name = newName.trim();
+      const newName = prompt("상품명:", products[index].name);
+      const newPrice = prompt("가격:", products[index].price);
+      const newStock = prompt("재고:", products[index].stock);
+      if (newName && !isNaN(newPrice) && !isNaN(newStock)) {
+        products[index].name = newName;
         products[index].price = Number(newPrice);
+        products[index].stock = Number(newStock);
         saveToStorage();
         render();
       } else {
-        alert("수정 값이 올바르지 않습니다.");
+        alert("입력값이 유효하지 않습니다.");
+      }
+    }
+
+    function sortBy(key) {
+      products.sort((a, b) => {
+        if (a[key] < b[key]) return -1 * sortDirection[key];
+        if (a[key] > b[key]) return 1 * sortDirection[key];
+        return 0;
+      });
+      sortDirection[key] *= -1;
+      render();
+    }
+
+    function clearAll() {
+      if (confirm("모든 상품을 삭제하시겠습니까?")) {
+        products = [];
+        saveToStorage();
+        render();
       }
     }
 
