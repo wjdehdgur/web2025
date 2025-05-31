@@ -7,107 +7,104 @@
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: #f4f6f8;
-      padding: 40px;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #3498db;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+    }
+    nav {
       display: flex;
       justify-content: center;
+      background-color: #ecf0f1;
+      padding: 10px 0;
+      gap: 20px;
+    }
+    nav button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #2980b9;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    nav button:hover {
+      background-color: #1c6690;
     }
     .container {
+      max-width: 600px;
+      margin: 20px auto;
       background: white;
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 600px;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #2c3e50;
     }
     label {
-      font-weight: 600;
       display: block;
-      margin: 15px 0 5px;
+      margin-top: 15px;
+      font-weight: bold;
     }
     input, select {
       width: 100%;
       padding: 10px;
-      font-size: 15px;
+      margin-top: 5px;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 5px;
     }
-    button {
-      margin-top: 10px;
-      width: 100%;
+    button.add {
+      background-color: #2ecc71;
+    }
+    button.add:hover {
+      background-color: #27ae60;
+    }
+    #productList li {
+      background: #f9f9f9;
       padding: 10px;
-      background-color: #3498db;
-      border: none;
-      color: white;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #2980b9;
-    }
-    .controls {
-      display: flex;
-      gap: 10px;
       margin-top: 10px;
-      flex-wrap: wrap;
-    }
-    #sortSelect {
-      width: 100%;
-      padding: 10px;
-      font-size: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-top: 10px;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 20px;
-    }
-    li {
-      background: #f0f0f0;
-      padding: 12px;
-      border-radius: 6px;
       display: flex;
       justify-content: space-between;
-      margin-bottom: 10px;
       align-items: center;
+      border-radius: 5px;
     }
     .actions button {
-      margin-left: 6px;
+      margin-left: 5px;
       padding: 5px 10px;
       font-size: 12px;
-      border-radius: 4px;
       border: none;
+      border-radius: 4px;
       cursor: pointer;
     }
     .edit { background-color: #f39c12; color: white; }
     .delete { background-color: #e74c3c; color: white; }
-    img.preview { max-height: 40px; margin-right: 10px; }
+    .hidden { display: none; }
+    img.preview { height: 40px; margin-right: 10px; border-radius: 4px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>상품 관리</h1>
-    <label for="name">상품명</label>
-    <input type="text" id="name" placeholder="상품명을 입력하세요">
-
-    <label for="price">가격</label>
-    <input type="number" id="price" placeholder="가격을 입력하세요">
-
-    <label for="stock">재고</label>
-    <input type="number" id="stock" placeholder="재고 수량 입력">
-
-    <label for="image">상품 이미지</label>
+  <header>쇼핑몰 관리자 페이지</header>
+  <nav>
+    <button onclick="showSection('add')">상품 추가</button>
+    <button onclick="showSection('list')">상품 확인</button>
+  </nav>
+  <div id="add" class="container">
+    <h2>상품 추가</h2>
+    <label>상품명</label>
+    <input type="text" id="name">
+    <label>가격</label>
+    <input type="number" id="price">
+    <label>재고</label>
+    <input type="number" id="stock">
+    <label>이미지</label>
     <input type="file" id="image">
-
-    <button onclick="addProduct()">상품 추가</button>
-
+    <button class="add" onclick="addProduct()">상품 추가</button>
+  </div>
+  <div id="list" class="container hidden">
+    <h2>상품 목록</h2>
     <div class="controls">
       <button onclick="clearAll()">전체 삭제</button>
       <select id="sortSelect" onchange="sortBySelect()">
@@ -118,12 +115,18 @@
         <option value="-price">가격역순</option>
       </select>
     </div>
-
     <ul id="productList"></ul>
   </div>
 
   <script>
     let products = JSON.parse(localStorage.getItem("products") || "[]");
+
+    function showSection(section) {
+      document.getElementById('add').classList.add('hidden');
+      document.getElementById('list').classList.add('hidden');
+      document.getElementById(section).classList.remove('hidden');
+      if (section === 'list') render();
+    }
 
     function saveToStorage() {
       localStorage.setItem("products", JSON.stringify(products));
@@ -159,11 +162,11 @@
       reader.onload = function(e) {
         products.push({ name, price: Number(price), stock: Number(stock), image: e.target.result });
         saveToStorage();
-        render();
         document.getElementById("name").value = "";
         document.getElementById("price").value = "";
         document.getElementById("stock").value = "";
         imageInput.value = "";
+        alert("상품이 추가되었습니다.");
       };
       if (imageInput.files[0]) reader.readAsDataURL(imageInput.files[0]);
     }
@@ -212,7 +215,7 @@
       }
     }
 
-    render();
+    showSection('add');
   </script>
 </body>
 </html>
