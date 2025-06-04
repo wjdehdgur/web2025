@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>쇼핑몰 관리자</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()">🌙 다크모드</button>
+  <nav>
+    <button onclick="showSection('add')">상품 추가</button>
+    <button onclick="showSection('edit')">상품 수정</button>
+    <button onclick="showSection('list')">상품 확인</button>
+  </nav>
+
+  <div id="add" class="container">
+    <h2>상품 추가</h2>
+    <label>상품명</label>
+    <input type="text" id="name">
+    <label>가격</label>
+    <input type="number" id="price">
+    <label>재고</label>
+    <input type="number" id="stock">
+    <label>이미지</label>
+    <input type="file" id="image">
+    <button class="add-btn" onclick="addProduct()">상품 추가</button>
+  </div>
+
+  <div id="edit" class="container hidden">
+    <h2>상품 수정 안내</h2>
+    <p>상품 목록에서 수정할 항목을 선택해 주세요.</p>
+  </div>
+
+  <div id="list" class="container hidden">
+    <h2>상품 목록</h2>
+    <div class="controls">
+      <button onclick="clearAll()">전체 삭제</button>
+      <select id="sortSelect" onchange="sortBySelect()">
+        <option value="">정렬 선택</option>
+        <option value="name">이름순</option>
+        <option value="-name">이름역순</option>
+        <option value="price">가격순</option>
+        <option value="-price">가격역순</option>
+      </select>
+    </div>
+    <ul id="productList"></ul>
+  </div>
+
+  <script src="theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
